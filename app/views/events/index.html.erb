@@ -32,6 +32,7 @@
         var marker = new google.maps.Marker({
             position: myLatlng,
             map: map,
+            icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=A|FF0000|000000',
             title: 'Hello World!'
         });
 
@@ -43,6 +44,7 @@
             var nextMkr = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lng),
                 map: map,
+                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=2|FF0000|000000',  
                 title: title
             });
         });
