@@ -1,11 +1,16 @@
+
 <div class="container">
     <div class="col-md-4">
+
+        <% count=0 %><%# Dynamically generating numbers for listings -%>
         <% @events.each do |item| %>
+        
             <% if item.key?('event')  %>
                 <div class="media event">
                   <a class="pull-left" href="#">
                     <img class="media-object img-thmb" src="<%= item['event']['logo']%>" alt=""/>
                   </a>
+                  <ul><%= count+=1 %></ul> <%# Dynamically generating numbers for listings -%>
                   <div class="media-body">
                     <h5 class="media-heading title"><%= item['event']['title'] %></h5>
                     <%= item['event']['start_date'] %> <br/>
