@@ -45,10 +45,16 @@
             icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=A|FF0000|000000',
             title: 'Hello World!'
         });
+        
+        var count = 0; <%# generate numbers for markers -%>
+        var icon1 = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='; <%#building icon-%>
+        var icon2 = '|FF0000|000000'; <%#building icon-%>
 
         $('div.event').each(function() {
             console.log(this);
-
+            
+            count += 1; <%# increment for markers -%>
+            
             var title = $(this).first().find('.title').html();
             var lat   = Number($(this).first().find('span.lat').html());
             var lng   = Number($(this).first().find('span.lng').html());
@@ -56,7 +62,7 @@
             var nextMkr = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lng),
                 map: map,
-                icon: 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=2|FF0000|000000',  
+                icon: icon1+count+icon2, <%#creating unique markers dynamically -%>
                 title: title
             });
         });
