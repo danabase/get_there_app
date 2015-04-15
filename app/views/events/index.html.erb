@@ -39,16 +39,17 @@
 
         var mapOptions = {
             center: { lat: firstLat, lng: firstLng},
-            zoom: 14 <%# increased zoom level by 1 -%>
+            zoom: 15 <%# increased default zoom level -%>
         };
         var map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
 
-        var marker = new google.maps.Marker({
-            position: myLatlng,
-            map: map,
-            title: 'Hello World!'
-        });
+        // var marker = new google.maps.Marker({   //commented this out as it appears to be a test
+        //     position: myLatlng,
+        //     map: map,
+        //     title: 'Hello World!'
+        // });
+        
         
         var count = 0; <%# generate numbers for markers -%>
         var icon1 = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='; <%#building icon-%>
@@ -62,13 +63,13 @@
             var title = $(this).first().find('.title').html();
             var lat   = Number($(this).first().find('span.lat').html());
             var lng   = Number($(this).first().find('span.lng').html());
-
             var nextMkr = new google.maps.Marker({
                 position: new google.maps.LatLng(lat, lng),
                 map: map,
                 icon: icon1+count+icon2, <%#creating unique markers dynamically -%>
                 title: title
             });
+            console.log("title: "+title);
         });
 
     });
