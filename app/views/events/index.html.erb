@@ -1,4 +1,6 @@
-
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?libraries=geometry"> //explicitly adding gmaps geometry library 
+</script>
 <div class="container">
     <div class="col-md-4">
 
@@ -30,6 +32,7 @@
     </div>
 </div>
 <script type="text/javascript">
+        
     $(document).ready(function(){
         //Get lag/lng of first entry
         var firstLat = Number($('div.event span.lat').first().html());
@@ -48,6 +51,8 @@
         var count = 0; <%# generate numbers for markers -%>
         var icon1 = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='; <%#building icon-%>
         var icon2 = '|FF0000|000000'; <%#building icon-%>
+        var maxDist = 1; //default value for the longest distance
+        var zipCord = new google.maps.LatLng(37.771229,-122.441269); //hard-coded coordinates for the center of zip code 94117
 
         $('div.event').each(function() {
             console.log(this);
@@ -63,15 +68,23 @@
                 icon: icon1+count+icon2, <%#creating unique markers dynamically -%>
                 title: title
             });
-            console.log("title: "+title);
+            
+            var tempCord = new google.maps.LatLng(lat,lng);
+            var tempDist;
+            tempDist = google.maps.geometry.spherical.computeDistanceBetween(zipCord,tempCord);
+            
+            if (tempDist > maxDist) maxDist = tempDist;
+            console.log("maxDist is: "+maxDist);
+            
         });
         
-        var varLat = 37.771229;
+        var varLat = 37.771229;        //hard-coded coordinates for the center of zip code 94117
         var varLong = -122.441269;
+        
 
         var cityCenter =  new google.maps.LatLng(varLat,varLong);
 
-        var circleOptions = {
+        var circleOptions = {            //create the radius
               strokeColor: '#FF0000',
               strokeOpacity: 0.1,
               strokeWeight: 2,
@@ -79,8 +92,8 @@
               fillOpacity: 0.15,
               map: map,
               center: cityCenter,
-              radius:1207.008 //   3/4 mile
-            };
+              radius: maxDist //this is the maximum distance between 
+            };                //the zip code and a listed event
 
          cityCircle = new google.maps.Circle(circleOptions);    
 
