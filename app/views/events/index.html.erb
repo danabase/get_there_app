@@ -39,16 +39,10 @@
 
         var mapOptions = {
             center: { lat: firstLat, lng: firstLng},
-            zoom: 15 <%# increased default zoom level -%>
+            zoom: 14 <%# increased default zoom level -%>
         };
         var map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
-
-        // var marker = new google.maps.Marker({   //commented this out as it appears to be a test
-        //     position: myLatlng,
-        //     map: map,
-        //     title: 'Hello World!'
-        // });
         
         
         var count = 0; <%# generate numbers for markers -%>
@@ -71,7 +65,25 @@
             });
             console.log("title: "+title);
         });
+        
+        var varLat = 37.771229;
+        var varLong = -122.441269;
 
-    });
+        var cityCenter =  new google.maps.LatLng(varLat,varLong);
+
+        var circleOptions = {
+              strokeColor: '#FF0000',
+              strokeOpacity: 0.1,
+              strokeWeight: 2,
+              fillColor: '#FF0000',
+              fillOpacity: 0.15,
+              map: map,
+              center: cityCenter,
+              radius:1207.008 //   3/4 mile
+            };
+
+         cityCircle = new google.maps.Circle(circleOptions);    
+
+        });
 
 </script>
