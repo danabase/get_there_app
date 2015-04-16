@@ -1,5 +1,6 @@
 <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?libraries=geometry"> //explicitly adding gmaps geometry library 
+  src="https://maps.googleapis.com/maps/api/js?sensor=false">
 </script>
 <div class="container">
     <div class="col-md-4">
@@ -18,6 +19,11 @@
                     <%= item['event']['start_date'] %> <br/>
                     <span class="lat hidden"><%= item['event']['venue']['latitude'] %></span>
                     <span class="lng hidden"><%= item['event']['venue']['longitude'] %></span>
+                    <span class = "venue-name"><%= item['event']['venue']['name'] %></span> <%#testing -%>
+                    <span class = "venue-address"><%= item['event']['venue']['address'] %></span>
+                    <span class = "venue-city"><%= item['event']['venue']['city'] %></span>
+                    <span class = "start-date"><%= item['event']['start_date'] %></span>
+                    <span class = "end-date">  <%= item['event']['end_date'] %></span>
                     <%= link_to 'more info', item['event']['url'] %> <br/>
                   </div>
 
@@ -34,28 +40,38 @@
 <script type="text/javascript">
         
     $(document).ready(function(){
+        
         //Get lag/lng of first entry
         var firstLat = Number($('div.event span.lat').first().html());
         var firstLng = Number($('div.event span.lng').first().html());
+        
 
         var myLatlng = new google.maps.LatLng(firstLat, firstLng);
-
+                                  //create map
         var mapOptions = {
             center: { lat: firstLat, lng: firstLng},
             zoom: 14 <%# increased default zoom level -%>
         };
         var map = new google.maps.Map(document.getElementById('map-canvas'),
                 mapOptions);
-        
+
         var count = 0; <%# generate numbers for markers -%>
         var icon1 = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld='; <%#building icon-%>
         var icon2 = '|FF0000|000000'; <%#building icon-%>
         var maxDist = 1; //default value for the longest distance
-        var zipCord = new google.maps.LatLng(37.771229,-122.441269); //hard-coded coordinates for the center of zip code 94117
+        
+        var varLat = 37.771229;        //hard-coded coordinates for the center of zip code 94117
+        var varLong = -122.441269;
+        var zipCord = new google.maps.LatLng(varLat,varLong); //hard-coded coordinates for the center of zip code 94117
 
         $('div.event').each(function() {
             console.log(this);
-            
+             var veName = $(this).first().find('span.venue-name').html();
+             var veAddr = $(this).first().find('span.venue-address').html();
+             var veCity = $(this).first().find('span.venue-city').html();
+             var ve_sd  = $(this).first().find('span.start-date').html();
+             var ve_ed  = $(this).first().find('span.end-date').html();
+        console.log("start_date: "+ve_sd);                                        // generate markers
             count += 1; <%# increment for markers -%>
             
             var title = $(this).first().find('.title').html();
@@ -67,23 +83,32 @@
                 icon: icon1+count+icon2, <%#creating unique markers dynamically -%>
                 title: title
             });
-            
+                                                        //calculate result-centric radius
             var tempCord = new google.maps.LatLng(lat,lng);
             var tempDist;
             tempDist = google.maps.geometry.spherical.computeDistanceBetween(zipCord,tempCord);
             
             if (tempDist > maxDist) maxDist = tempDist;
-            console.log("maxDist is: "+maxDist);
+                                                        //create Info Windows
+                                         
+            var infoWindowOptions = {
+                content: veName+"<br />"+veAddr+"<br />"+veCity+"<br />"+ve_sd+"<br />"+ve_ed
+            };
+            
+            var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
+            
+            google.maps.event.addListener(nextMkr,'click',function(e){
+              infoWindow.open(map, nextMkr);
+  
+            });
             
         });
         
-        var varLat = 37.771229;        //hard-coded coordinates for the center of zip code 94117
-        var varLong = -122.441269;
         
 
         var cityCenter =  new google.maps.LatLng(varLat,varLong);
 
-        var circleOptions = {            //create the radius
+        var circleOptions = {            
               strokeColor: '#FF0000',
               strokeOpacity: 0.1,
               strokeWeight: 2,
