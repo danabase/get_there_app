@@ -1,6 +1,7 @@
 <script type="text/javascript"
   src="https://maps.googleapis.com/maps/api/js?libraries=geometry"> //explicitly adding gmaps geometry library 
   src="https://maps.googleapis.com/maps/api/js?sensor=false">
+  src="dateFormat.js">
 </script>
 <div class="container">
     <div class="col-md-4">
@@ -38,6 +39,46 @@
     </div>
 </div>
 <script type="text/javascript">
+
+function formatDate12HR(date) {
+                            //get values
+    var d = new Date(date);
+    var hh = d.getHours();
+    var m = d.getMinutes();
+    var s = d.getSeconds();
+    var dd = "AM";
+    var h = hh;
+    
+    var month = '' + (d.getMonth() + 1);
+    var day = '' + d.getDate();
+    var year = d.getFullYear();
+                            
+    if (h >= 12) {
+        h = hh-12;
+        dd = "PM";
+    }
+    
+    if (h === 0) {
+        h = 12;
+    }
+                            
+    m = m<10?"0"+m:m;                           
+    s = s<10?"0"+s:s;
+
+    
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    var pattern = new RegExp("0?"+hh+":"+m+":"+s);
+
+    var replacement = h+":"+m;
+  
+    replacement += " "+dd;   
+    var x =[month, day, year].join('/');
+    date = x + " "+replacement;
+    
+    return date;
+}
         
     $(document).ready(function(){
         
@@ -70,7 +111,9 @@
              var veAddr = $(this).first().find('span.venue-address').html();
              var veCity = $(this).first().find('span.venue-city').html();
              var ve_sd  = $(this).first().find('span.start-date').html();
+             ve_sd =  formatDate12HR(ve_sd);                                //date formatting
              var ve_ed  = $(this).first().find('span.end-date').html();
+             ve_ed = formatDate12HR(ve_ed);
         console.log("start_date: "+ve_sd);                                        // generate markers
             count += 1; <%# increment for markers -%>
             
@@ -90,9 +133,10 @@
             
             if (tempDist > maxDist) maxDist = tempDist;
                                                         //create Info Windows
-          //  var v_name = item['event']['venue']['name']                                            
+                                                      
             var infoWindowOptions = {
-                content: veName+"<br />"+veAddr+"<br />"+veCity+"<br />"+ve_sd+"<br />"+ve_ed
+                content: veName+"<br />"+veAddr+"<br />"+veCity+"<br />"+
+                'Starts: '+ve_sd+"<br />"+'Ends: '+ve_ed
             };
             
             var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
