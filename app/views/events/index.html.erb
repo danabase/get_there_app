@@ -21,6 +21,9 @@
                     <span class="lng hidden"><%= item['event']['venue']['longitude'] %></span>
                     <span class = "venue-name"><%= item['event']['venue']['name'] %></span> <%#testing -%>
                     <span class = "venue-address"><%= item['event']['venue']['address'] %></span>
+                    <span class = "venue-city"><%= item['event']['venue']['city'] %></span>
+                    <span class = "start-date"><%= item['event']['start_date'] %></span>
+                    <span class = "end-date">  <%= item['event']['end_date'] %></span>
                     <%= link_to 'more info', item['event']['url'] %> <br/>
                   </div>
 
@@ -65,6 +68,9 @@
             console.log(this);
              var veName = $(this).first().find('span.venue-name').html();
              var veAddr = $(this).first().find('span.venue-address').html();
+             var veCity = $(this).first().find('span.venue-city').html();
+             var ve_sd  = $(this).first().find('span.start-date').html();
+             var ve_ed  = $(this).first().find('span.end-date').html();
         console.log("vName is: "+veName);                                        // generate markers
             count += 1; <%# increment for markers -%>
             
@@ -86,7 +92,7 @@
                                                         //create Info Windows
           //  var v_name = item['event']['venue']['name']                                            
             var infoWindowOptions = {
-                content: veName+"\n"+veAddr
+                content: veName+"<br />"+veAddr+"<br />"+veCity+"<br />"+ve_sd+"<br />"+ve_ed
             };
             
             var infoWindow = new google.maps.InfoWindow(infoWindowOptions);
